@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Runtime.InteropServices;
 public class GamePlayController : MonoBehaviour
 {
+	[DllImport("__Internal")]
+	private static extern void GameOver(int score);
 	public score scoreScript;
 	public Transform overlay;
 	public UnityEngine.UI.Text timeText;
@@ -37,6 +39,9 @@ public class GamePlayController : MonoBehaviour
 		overlay.gameObject.SetActive(true);
 		scoreScript.getScore();
 		finalScoreText.text = "Your score is : " + scoreScript.getScore();
+#if UNITY_WEBGL == true && UNITY_EDITOR == false
+    	GameOver(scoreScript.getScore());
+#endif
 
 
 		Time.timeScale = 0;
